@@ -1,1 +1,72 @@
+class Customer:
+    customerName = input("Enter the cutomer name: ")
 
+    class Share:
+        def __init__(self,shareName, purchasePrice,units,sellingPrice):
+            self.shareName = shareName
+            self.purchasePrice = int(purchasePrice)
+            self.units = units
+            self.sellingPrice = int(sellingPrice)
+            self.next = None
+        
+    def __init__(self):
+        self.head = None
+        self.tail = None
+        self.count = 0
+
+    def isShareEmpty(self):
+        return self.count == 0
+    
+    def getShareCount(self):
+        return self.count
+        
+    def purchasingShare(self,shareName,purchasePrice,units,sellingPrice):
+        if self.count <= 1:
+            newShare = self.Share(shareName,purchasePrice,units,sellingPrice)
+            if self.count == 0:
+                self.head = self.tail =  newShare   
+            else:
+                self.tail.next = newShare
+                self.tail = newShare
+            self.count = self.count + 1 
+        else:
+            print("*****Share Exceeded*****")
+            promptSell = input(f"Do you want to sell the share {self.head.shareName} with a price {self.head.sellingPrice}? \nEnter **Yes** or **No**: \n")
+            if promptSell == "Yes":
+                self.sellingShare()
+                
+    def sellingShare(self):
+        self.head = self.head.next
+        self.count -= 1
+        self.purchasingShare(shareName=input("Enter Share Name: "),purchasePrice = input("Enter Purchase Price: "),units= input("Enter Units Purchased:"),sellingPrice=input("Enter the selling price:"))
+
+    def make_estimation(self):
+        boughtPrice = 0
+        sellPrice = 0
+        cur = self.head
+        while cur != None:
+            boughtPrice = boughtPrice + cur.purchasePrice
+            sellPrice = sellPrice + cur.sellingPrice
+            cur = cur.next
+        avgBuyingPrice = boughtPrice / self.getShareCount()
+        avgSellingPrice = sellPrice / self.getShareCount()
+        if avgBuyingPrice > avgSellingPrice:
+            print("Loss in trading. Avg buying price is going up!!!!")
+        elif avgBuyingPrice < avgSellingPrice:
+            print("Hurray!!!!!! \nProfit in trading. Avg selling price is going up.")
+
+    def printShares(self):
+        share = self.head
+        while share != None:
+            print(f"Share Name: {share.shareName},Share Price: {share.purchasePrice}, Share Units: {share.units}, Selling Price: {share.sellingPrice}")
+            share = share.next
+
+customer1 = Customer()
+
+customer1.purchasingShare(shareName=input("Enter Share Name: "),purchasePrice = input("Enter Purchase Price: "),units= input("Enter Units Purchased:"),sellingPrice=input("Enter the selling price:"))
+customer1.purchasingShare(shareName=input("Enter Share Name: "),purchasePrice = input("Enter Purchase Price: "),units= input("Enter Units Purchased:"),sellingPrice=input("Enter the selling price:"))
+customer1.purchasingShare(shareName=input("Enter Share Name: "),purchasePrice = input("Enter Purchase Price: "),units= input("Enter Units Purchased:"),sellingPrice=input("Enter the selling price:"))
+
+print("_____________________The Shares bought are_____________________: \n")
+customer1.printShares()
+customer1.make_estimation()
